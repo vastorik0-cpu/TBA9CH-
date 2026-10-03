@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Boost Your Country — Live Overlay</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <audio id="bgMusic" preload="auto" autoplay loop playsinline src="assets/cutscene-crush.mp3"></audio>
+  <div id="donationTicker" class="donation-ticker"><div id="donationTrack" class="donation-track"></div></div>
+  <div id="voteTicker" class="vote-ticker"><div id="voteTrack" class="vote-track"></div></div>
+  <main class="app">
+
+    <section class="pro-hud" aria-label="Live status">
+      <div class="live-pill"><span class="live-dot"></span><b>LIVE</b><span id="proLiveTime">00:00</span></div>
+      <div class="hud-title"><span id="proRound">ROUND 01</span><strong>COUNTRY BATTLE</strong></div>
+      <div class="viewer-pill">👁 <b id="proViewers">0</b></div>
+    </section>
+    <section class="pro-banner">
+      <div class="banner-glow"></div>
+      <div class="banner-copy">
+        <span class="eyebrow">GLOBAL LIVE BATTLE</span>
+        <h2 id="proBattleTitle">BOOST YOUR COUNTRY</h2>
+        <p id="proBattleSub">Vote in chat • Support your country • Climb the leaderboard</p>
+      </div>
+      <div class="battle-badge">⚡ <b id="proTotalPoints">0</b><small>LIVE POINTS</small></div>
+    </section>
+    <section class="pro-metrics">
+      <div><span>💬 VOTES</span><b id="proVotes">0</b></div>
+      <div><span>💰 SUPPORT</span><b id="proSupport">$0.00</b></div>
+      <div><span>🔥 LEAD STREAK</span><b id="proStreak">0</b></div>
+    </section>
+    <section class="leader-card">
+      <div class="leader-top"><span>👑 CURRENT LEADER</span><span id="proGap">—</span></div>
+      <div class="leader-main">
+        <div class="leader-flag" id="proLeaderFlag">🌍</div>
+        <div class="leader-copy"><strong id="proLeaderName">Waiting for votes</strong><span id="proLeaderPoints">0 points</span></div>
+        <div class="leader-rank">#1</div>
+      </div>
+      <div class="leader-progress"><i id="proLeaderFill"></i></div>
+    </section>
+    <section class="event-arena">
+      <div class="arena-head"><span>⚡ LIVE ACTIVITY</span><span id="proEventClock">READY</span></div>
+      <div id="proEventFeed" class="event-feed"><div class="event-empty">Waiting for the first live event…</div></div>
+    </section>
+    <header class="hero">
+      <div class="spark">✦</div>
+      <h1>BOOST YOUR COUNTRY</h1>
+      <div class="spark">✦</div>
+    </header>
+
+    <section class="stats-row">
+      <div class="card gold">
+        <div class="icon">💰</div>
+        <div><b>1 $ Superchat / Gift</b><strong>+40000 Points</strong></div>
+      </div>
+      <div class="card cyan">
+        <div class="icon">🔔</div>
+        <div><b>Like &amp; Subscribe</b><strong>+400 Points</strong></div>
+      </div>
+    </section>
+
+    <section class="comments-panel">
+      <div class="label">LIVE CHAT</div>
+      <div id="commentText" class="comment">Waiting for comments...</div>
+    </section>
+
+    <section class="goal-bar"><div class="goal-fill" id="goalFill"></div><div class="goal-text">LIVE GOAL <span id="goalPercent">0%</span></div></section>
+
+    <section class="members-panel">
+      <div class="panel-head">
+        <div class="pink-title">👥 SUPERCHAT MEMBERS</div>
+        <div class="goal">🎯 GOAL = <span id="goalCurrent">$0.00</span>/<span id="goalTarget">$50</span></div>
+      </div>
+      <div id="supporterList" class="supporters"><div class="empty">👑<br/>Waiting for Super Chat supporters...</div></div>
+    </section>
+
+    <section class="podium-wrap"><div class="section-title">🏆 LIVE LEADERBOARD</div><section class="podium" id="podium"></section></section>
+    <section class="countries" id="countries"></section>
+
+    <div id="eventToast" class="event-toast"></div>
+    <footer class="brand">BOOST YOUR COUNTRY • <span class="pro-mark">PRO LIVE ENGINE</span> • <span id="status">Demo mode</span></footer>
+  </main>
+
+  <aside class="admin" id="adminPanel">
+    <button id="adminToggle" class="admin-toggle">⚙️ Settings</button>
+    <div class="admin-body">
+      <h2>Live Control</h2>
+      <label>YouTube Live/Video URL
+        <input id="videoUrl" placeholder="https://youtu.be/..." />
+      </label>
+      <label>YouTube API key
+        <input id="apiKey" type="password" placeholder="Set in Netlify as YOUTUBE_API_KEY or paste here" />
+      </label>
+      <label>Goal ($)
+        <input id="goalInput" type="number" min="1" value="50" />
+      </label>
+      <label>Selected country for manual events
+        <select id="countrySelect"></select>
+      </label>
+      <div class="buttons">
+        <button id="connect">▶ Connect Live</button>
+        <div class="points-settings">
+        <div class="voice-title">🎯 POINT VALUES</div>
+        <div class="points-grid">
+          <label>Like <input id="likePoints" type="number" min="0" max="10000" value="400" /></label>
+          <label>Subscribe <input id="subPoints" type="number" min="0" max="10000" value="400" /></label>
+          <label>Member <input id="memberPoints" type="number" min="0" max="10000" value="400" /></label>
+          <label>Super Chat / $1 <input id="superPoints" type="number" min="0" max="100000" value="40000" /></label>
+        </div>
+      </div>
+
+      <div class="music-settings">
+        <div class="voice-title">🎵 MUSIC</div>
+        <label>Music file (MP3 / WAV / OGG)
+          <input id="musicFile" type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/*" />
+        </label>
+        <div class="music-controls">
+          <button id="musicPlay">▶ Play</button>
+          <button id="musicPause">⏸ Pause</button>
+          <button id="musicStop">⏹ Stop</button>
+        </div>
+        <label class="music-row">Volume
+          <input id="musicVolume" type="range" min="0" max="1" step="0.01" value="0.35" />
+        </label>
+        <label class="music-check"><input id="musicLoop" type="checkbox" checked /> 🔁 Loop music</label>
+        <div id="musicName" class="music-name">No music selected</div>
+      </div>
+
+      <div class="voice-settings">
+        <div class="voice-title">🔊 AI VOICE</div>
+        <button id="voiceToggle">🔇 AI Voice: OFF</button>
+        <label class="voice-row">Voice
+          <select id="voiceSelect"><option value="female">👩 Female</option><option value="auto">⚙️ Auto</option></select>
+        </label>
+        <div class="voice-events">
+          <label><input id="voiceChat" type="checkbox" checked> 💬 Chat</label>
+          <label><input id="voiceLike" type="checkbox" checked> 👍 Likes</label>
+          <label><input id="voiceSub" type="checkbox" checked> 🔔 Subscribers</label>
+          <label><input id="voiceSupport" type="checkbox" checked> 💰 Support</label>
+          <label><input id="voiceMember" type="checkbox" checked> 👥 Members</label>
+        </div>
+      </div>
+
+      <div class="pro-controls">
+        <div class="voice-title">🎬 PRO LIVE CONTROLS</div>
+        <div class="pro-control-grid">
+          <label>Round <input id="roundInput" type="number" min="1" max="99" value="1"></label>
+          <label>Title <input id="battleTitleInput" type="text" maxlength="42" value="BOOST YOUR COUNTRY"></label>
+          <label>Subtitle <input id="battleSubInput" type="text" maxlength="70" value="Vote in chat • Support your country • Climb the leaderboard"></label>
+        </div>
+        <div class="buttons pro-buttons">
+          <button id="roundNext">⚡ Next Round</button>
+          <button id="clearFeed">🧹 Clear Activity</button>
+        </div>
+      </div>
+        <button id="demoSuper">💰 Demo $1 Super Chat</button>
+        <button id="demoLike">👍 +400 Like</button>
+        <button id="demoSub">🔔 +400 Subscribe</button>
+        <button id="reset">↺ Reset Points</button>
+      </div>
+      <p class="hint">Chat voting is automatic: when a viewer writes a country name, Arabic country name, common alias, or flag emoji, the country gets +1 and the leaderboard updates instantly. The manual country selector is only for likes/subscribers and other manual events.</p>
+      <div class="event-log" id="eventLog"></div>
+    </div>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>
